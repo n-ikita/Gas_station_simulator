@@ -1,7 +1,15 @@
 from random import randint
 from RU_LOCAL import ru
 from EN_LOCAL import en
+
+
 def make_visitors_dict(file):
+    """
+    Function makes dictionary with visitors form file
+    :param file: input file with visitors
+    :return: dictionary with arrive time in keys and list of full visitor's info in values
+    :rtype: dict
+    """
     with open(file, 'r', encoding='UTF-8') as f:
         s = f.readlines()
         for i in range(len(s)):
@@ -20,6 +28,17 @@ def make_visitors_dict(file):
 
 
 def make_machine_list(file):
+    """
+    Function makes list with full information about machines from file
+    :param file: input file with station info
+    :return: list including lists with machines info:
+        number(int),
+        max queue(int),
+        fuel marks(set),
+        visitors in queue(list),
+        time before leaving(int)
+    :rtype: list
+    """
     with open(file, 'r', encoding='UTF-8') as station_file:
         m_list = station_file.readlines()
 
@@ -30,6 +49,17 @@ def make_machine_list(file):
 
 
 def get_info(m_list, num, info_type='visitors'):
+    """
+    Support function, returns required value from list with machines info
+    :param m_list: machine list
+    :param num: number of machine
+    :param info_type: definition of return value:
+        1, 'q' or 'queue' returns max queue
+        2, 'm' or 'marks' returns fuel marks
+        3, 'v' or 'visitors' returns list of current visitors
+        4, 't' or 'time' returns time before leaving
+    :return: required value from machine list
+    """
     if info_type in [1, 'q', 'queue']:
         return m_list[num - 1][1]
     elif info_type in [2, 'm', 'marks']:
@@ -41,6 +71,14 @@ def get_info(m_list, num, info_type='visitors'):
 
 
 def add_visitor(visitor, m_list):
+    """
+    Function adds visitor to current visitors in machine list
+     and returns visitor info and number of machine,
+     if visitor cannot get in line, returns empty list
+    :param visitor: info about visitor
+    :param m_list: machine list
+    :return: visitor info and number of machine / []
+    """
     if not visitor:
         return []
 
@@ -60,6 +98,11 @@ def add_visitor(visitor, m_list):
 
 
 def remove_visitor(m_list):
+    """
+    Function removes leaving visitors from machine list and returns info about removed visitors
+    :param m_list: list with machines info
+    :return: list with info of removed visitors
+    """
     visitors_out = []
     for i in range(len(m_list)):
         if not get_info(m_list, i+1):
@@ -75,33 +118,14 @@ def remove_visitor(m_list):
     return visitors_out
 
 
-"""def print_info(info, time, m_list):
-
-    if info['in'] != []:
-    
-        print('В '+ time + ' новый клиент:' + ' ' + info['in'][0][0] + ' ' + info['in'][0][2] + ' '
-              + str(info['in'][0][1]) + ' ' + str(info['in'][0][3]) + ' ' + 'встал в очередь к автомату №'
-              + str(info['in'][1]))
-        for m in range(len(m_list)):
-            print('Автомат №' + str(m_list[m][0]) + ' максимальная очередь: ' + str(m_list[m][1])
-                  + ' Марки бензина: ', *m_list[m][2], ' -> ' + len(m_list[m][3]) * '*')
-    if info['out'] != []:
-        for i in range(len(info['out'])):
-            print('В ' + time + ' клиент ' + info['out'][i][0] + ' ' + info['out'][i][2] + ' '
-                  + str(info['out'][i][1]) + ' ' + str(info['out'][i][3]) + ' заправил свой автомобиль и покинул АЗС' )
-            for m in range(len(m_list)):
-                print('Автомат №' + str(m_list[m][0]) + ' максимальная очередь: ' + str(m_list[m][1])
-                      + ' Марки бензина: ', *m_list[m][2], ' -> ' + len(m_list[m][3]) * '*')
-    if info['lost'] != []:
-        print('В ' + time + ' новый клиент: ' + time + ' ' + info['lost'][2] + ' '
-              + str(info['lost'][1]) + ' ' + str(info['lost'][3]) + ' не смог заправить свой автомобиль и покинул АЗС')
-        for m in range(len(m_list)):
-            print('Автомат №' + str(m_list[m][0]) + ' максимальная очередь: ' + str(m_list[m][1])
-                  + ' Марки бензина: ', *m_list[m][2], ' -> ' + len(m_list[m][3]) * '*')
-"""
-
-
 def print_info(info, time, m_list):
+    """
+    Function prints information about updates on gas station
+    :param info: dictionary with information about arriving, leaving and lost visitors
+    :param time: current time
+    :param m_list: machine list
+    :return: None
+    """
     if info['in'] != []:
         print(ru['In'], time, ru['new client'] + ':', *info['in'][0],
               ru['joined the queue'], '№' + str(info['in'][1]))
@@ -121,23 +145,11 @@ def print_info(info, time, m_list):
                   ru['Fuel marks'], *m_list[m][2], ' -> ' + len(m_list[m][3]) * '*')
 
 
-def print_info_late(time, m_list):
-    for i in range(len(m_list)):
-        visitors = get_info(m_list, i+1)
-        while visitors:
-            visitor = visitors.pop(0)
 
-            print('В ' + time + ' клиент: ' + visitor[0] + ' ' + visitor[2] + ' '
-                  + str(visitor[1]) + ' ' + str(visitor[3]) + ' не успел заправить свой автомобиль и покинул АЗС')
-            for m in range(len(m_list)):
-                print('Автомат №' + str(m_list[m][0]) + ' максимальная очередь: ' + str(m_list[m][1])
-                      + ' Марки бензина: ', *m_list[m][2], ' -> ' + len(m_list[m][3]) * '*')
-
-
-PRICES = {'АИ-80': 40.4,
-          'АИ-92': 42.3,
-          'АИ-95': 49.5,
-          'АИ-98': 59.5}
+PRICES = {'АИ-80': 42.51,
+          'АИ-92': 48.89,
+          'АИ-95': 52.42,
+          'АИ-98': 67.28}
 
 machine_list = make_machine_list('station_info.txt')
 visitors_dict = make_visitors_dict('input.txt')
@@ -195,6 +207,6 @@ for i in range(len(machine_list)):
 for mark, volume in volumes.items():
     print(mark, ':', volume, ru['liters'])
 
-print(ru['revenue'] + ': ', revenue)
+print(ru['revenue'] + ': ', round(revenue, 2))
+print(ru['lost revenue'] + ': ', round(lost_revenue, 2))
 print(ru['lost clients'] + ': ', lost_cars_count)
-print(ru['lost revenue'] + ': ', lost_revenue)
