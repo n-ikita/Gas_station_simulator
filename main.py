@@ -1,6 +1,6 @@
 from random import randint
 from RU_LOCAL import ru
-
+from EN_LOCAL import en
 def make_visitors_dict(file):
     with open(file, 'r', encoding='UTF-8') as f:
         s = f.readlines()
@@ -195,6 +195,6 @@ for i in range(len(machine_list)):
 for mark, volume in volumes.items():
     print(mark, ':', volume, ru['liters'])
 
-print(ru['Revenue'] + ': ', revenue)
+print(ru['revenue'] + ': ', revenue)
 print(ru['lost clients'] + ': ', lost_cars_count)
 print(ru['lost revenue'] + ': ', lost_revenue)
