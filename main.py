@@ -11,19 +11,18 @@ def make_visitors_dict(file):
     :rtype: dict
     """
     with open(file, 'r', encoding='UTF-8') as input_file:
-        s = input_file.readlines()
-    for i in range(len(s)):
-        s[i] = s[i].replace('\n', '')
+        input_list = input_file.readlines()
+    for i in range(len(input_list)):
+        input_list[i] = input_list[i].replace('\n', '')
     visitors_dict = {}
-    for m in range(len(s)):
-        s[m] = s[m].split()
-        if int(s[m][1]) < 10:
-            time = 1
-        if int(s[m][1]) == 10:
-            time = int((-(-(int(s[m][1]) / 10) // 1) + randint(0, 1)))
-        if int(s[m][1]) > 10:
-            time = int((-(-(int(s[m][1]) / 10) // 1) + randint(-1, 1)))
-        visitors_dict[s[m][0]] = [s[m][0], int(s[m][1]), s[m][2], time]
+    for m in range(len(input_list)):
+        input_list[m] = input_list[m].split()
+        if int(input_list[m][1]) <= 10:
+            time = int((-(-(int(input_list[m][1]) / 10) // 1) + randint(0, 1)))
+        else:
+            time = int((-(-(int(input_list[m][1]) / 10) // 1) + randint(-1, 1)))
+        visitors_dict[input_list[m][0]] = \
+            [input_list[m][0], int(input_list[m][1]), input_list[m][2], time]
     return visitors_dict
 
 
