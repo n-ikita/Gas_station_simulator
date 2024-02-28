@@ -1,5 +1,5 @@
 from random import randint
-from RU_LOCAL import ru
+from RU_LOCAL import ru, ru_fuel_marks
 from EN_LOCAL import en
 
 
@@ -10,21 +10,21 @@ def make_visitors_dict(file):
     :return: dictionary with arrive time in keys and list of full visitor's info in values
     :rtype: dict
     """
-    with open(file, 'r', encoding='UTF-8') as f:
-        s = f.readlines()
-        for i in range(len(s)):
-            s[i] = s[i].replace('\n', '')
-        visitors_dict = {}
-        for m in range(len(s)):
-            s[m] = s[m].split()
-            if int(s[m][1]) < 10:
-                time = 1
-            if int(s[m][1]) == 10:
-                time = int((-(-(int(s[m][1]) / 10) // 1) + randint(0, 1)))
-            if int(s[m][1]) > 10:
-                time = int((-(-(int(s[m][1]) / 10) // 1) + randint(-1, 1)))
-            visitors_dict[s[m][0]] = [s[m][0], int(s[m][1]), s[m][2], time]
-        return visitors_dict
+    with open(file, 'r', encoding='UTF-8') as input_file:
+        s = input_file.readlines()
+    for i in range(len(s)):
+        s[i] = s[i].replace('\n', '')
+    visitors_dict = {}
+    for m in range(len(s)):
+        s[m] = s[m].split()
+        if int(s[m][1]) < 10:
+            time = 1
+        if int(s[m][1]) == 10:
+            time = int((-(-(int(s[m][1]) / 10) // 1) + randint(0, 1)))
+        if int(s[m][1]) > 10:
+            time = int((-(-(int(s[m][1]) / 10) // 1) + randint(-1, 1)))
+        visitors_dict[s[m][0]] = [s[m][0], int(s[m][1]), s[m][2], time]
+    return visitors_dict
 
 
 def make_machine_list(file):
@@ -146,10 +146,10 @@ def print_info(info, time, m_list):
 
 
 
-PRICES = {'АИ-80': 42.51,
-          'АИ-92': 48.89,
-          'АИ-95': 52.42,
-          'АИ-98': 67.28}
+PRICES = {ru_fuel_marks[80]: 42.51,
+          ru_fuel_marks[92]: 48.89,
+          ru_fuel_marks[95]: 52.42,
+          ru_fuel_marks[98]: 67.28}
 
 machine_list = make_machine_list('station_info.txt')
 visitors_dict = make_visitors_dict('input.txt')
@@ -160,7 +160,7 @@ lost_cars = [] #list of cars that station lost
 revenue = 0
 lost_cars_count = 0
 lost_revenue = 0
-volumes = {'АИ-80': 0, 'АИ-92': 0, 'АИ-95': 0, 'АИ-98': 0}
+volumes = {ru_fuel_marks[80]: 0, ru_fuel_marks[92]: 0, ru_fuel_marks[95]: 0, ru_fuel_marks[98]: 0}
 
 for hour in range(24):
     for minute in range(60):
