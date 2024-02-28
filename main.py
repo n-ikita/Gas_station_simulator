@@ -7,7 +7,11 @@ def make_visitors_dict(file):
     """
     Function makes dictionary with visitors form file
     :param file: input file with visitors
-    :return: dictionary with arrive time in keys and list of full visitor's info in values
+    :return: dictionary with arrive time in keys and list of full visitor's info in values:
+        arrive time(str),
+        volume(int),
+        fuel mark(str),
+        time of fueling(int)
     :rtype: dict
     """
     with open(file, 'r', encoding='UTF-8') as input_file:
